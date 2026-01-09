@@ -1,6 +1,6 @@
 # Database Migration Tool
 
-An automated PostgresSQL database migration tool that intelligently compares schemas, detects changes, and migrates data with minimal manual intervention.
+An automated PostgreSQL database migration tool that intelligently compares schemas, detects changes, and migrates data with minimal manual intervention.
 
 ## Features
 
@@ -510,7 +510,7 @@ Additionally, the tool handles:
 
 ## Limitations
 
-- Currently supports PostgresSQL only
+- Currently supports PostgreSQL only
 - Text/JSON data only (no binary file uploads)
 - Does not handle:
   - Stored procedures
