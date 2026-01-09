@@ -1,0 +1,26 @@
+{
+  "old_database": {
+    "host": "your-old-server.com",
+    "port": 5432,
+    "database": "mydb",
+    "username": "readonly_user",
+    "password": "your_password",
+    "schema": "public",
+    "sslmode": "disable"
+  },
+  "new_database": {
+    "host": "your-new-server.com",
+    "port": 5432,
+    "database": "mydb",
+    "username": "readonly_user",
+    "password": "your_password",
+    "schema": "public",
+    "sslmode": "disable"
+  },
+  "tables":[
+    "tables",
+    "to",
+    "be",
+    "migrated"
+  ]
+}
