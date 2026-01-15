@@ -407,6 +407,62 @@ WHERE p.category_name = c.name;
 - VARCHAR→VARCHAR with size reduction → Potential data loss
 
 ## Automatic Type Conversions
+### Generating SQL for Missing Lookup Values
+
+**Problem:** After a dry run migration, the result file contains errors like:
+```
+Value 'xxx' not found in lookup table for column 'yyy' -> 'zzz'
+```
+
+This means the lookup table `zzz` is missing values that exist in the source data.
+
+**Solution:** Use the `generate_lookup_inserts.py` helper script to automatically generate SQL INSERT statements for all missing values.
+
+```bash
+# Print SQL to stdout
+python scripts/generate_lookup_inserts.py results/prod_migration_result_dryrun_*.json
+
+# Save to file
+python scripts/generate_lookup_inserts.py results/prod_migration_result_dryrun_*.json -o results/missing_lookup_values.sql
+
+# Use batched inserts for better performance
+python scripts/generate_lookup_inserts.py results/prod_migration_result_dryrun_*.json -b -o results/missing_lookup_values.sql
+```
+
+**Example Output:**
+```
+📊 Found 59 unique missing values across 1 lookup table(s):
+   - attribute_key: 59 missing values
+
+✅ SQL written to: results/missing_lookup_values.sql
+```
+
+**Generated SQL:**
+```sql
+-- Auto-generated SQL to insert missing lookup table values
+-- Generated at: 2026-01-15T09:53:47.046364
+
+-- Missing values for table: attribute_key
+-- Total missing: 59
+
+INSERT INTO attribute_key (attribute_key) VALUES ('ip');
+INSERT INTO attribute_key (attribute_key) VALUES ('max_brightness');
+INSERT INTO attribute_key (attribute_key) VALUES ('MQTT Broker Connector');
+-- ... more values
+```
+
+**Options:**
+- `-o, --output` - Output SQL file path (prints to stdout if not specified)
+- `-b, --batched` - Generate batched INSERT statements for better performance
+- `--batch-size` - Batch size for batched inserts (default: 100)
+
+**Workflow:**
+1. Run dry run migration
+2. If lookup errors occur, run `generate_lookup_inserts.py` on the result file
+3. Review the generated SQL
+4. Execute the SQL against the new database to populate missing lookup values
+5. Re-run the dry run migration to verify errors are resolved
+
 
 The tool automatically handles these PostgreSQL type conversions:
 
