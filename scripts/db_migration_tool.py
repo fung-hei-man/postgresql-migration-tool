@@ -8,6 +8,7 @@ Requires: pip install psycopg2-binary
 import psycopg2
 import json
 import sys
+import os
 from typing import Dict, List, Tuple, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
@@ -531,6 +532,7 @@ if __name__ == "__main__":
 
     # Save files with prefix to results folder
     report_file = f"results/{prefix}migration_report.txt"
+    os.makedirs(os.path.dirname(report_file), exist_ok=True)
     with open(report_file, "w") as f:
         f.write(report)
     print(f"\n📄 Report saved to: {report_file}")
